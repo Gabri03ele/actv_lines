@@ -1,0 +1,203 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+1,ACTVs.p.a,1,"P.le Roma ""F"" - Lido S.M.E. ""D""",UN,4,,FFFFFF,000000
+2,ACTVs.p.a,1,"P.le Roma ""C"" - Lido S.M.E. ""D""",UN,4,,FFFFFF,000000
+3,ACTVs.p.a,1,"P.le Roma ""C"" - Lido S.M.E. ""D""",UN,4,,FFFFFF,000000
+4,ACTVs.p.a,1,"S. Toma' ""A"" - Lido S.M.E. ""D""",UN,4,,FFFFFF,000000
+5,ACTVs.p.a,1,"S. Marco-San Zaccaria ""F"" - Lido S.M.E. ""D""",UN,4,,FFFFFF,000000
+6,ACTVs.p.a,1,"P.le Roma ""F"" - Lido S.M.E. ""D""",UN,4,,FFFFFF,000000
+7,ACTVs.p.a,1,"P.le Roma ""F"" - Lido S.M.E. ""D""",UN,4,,FFFFFF,000000
+8,ACTVs.p.a,1,"Lido S.M.E. ""D"" - P.le Roma ""G""",UN,4,,FFFFFF,000000
+9,ACTVs.p.a,1,"Lido S.M.E. ""D"" - P.le Roma ""G""",UN,4,,FFFFFF,000000
+10,ACTVs.p.a,1,"Lido S.M.E. ""D"" - P.le Roma ""G""",UN,4,,FFFFFF,000000
+11,ACTVs.p.a,1,"Lido S.M.E. ""D"" - P.le Roma ""G""",UN,4,,FFFFFF,000000
+12,ACTVs.p.a,1,"Rialto ""A"" - P.le Roma ""G""",UN,4,,FFFFFF,000000
+13,ACTVs.p.a,11,Pellestrina Cimitero - Chioggia,UN,4,,F7ACBC,000000
+14,ACTVs.p.a,11,Pellestrina Cimitero - Chioggia,UN,4,,F7ACBC,000000
+15,ACTVs.p.a,11,Alberoni Faro Rocchetta - S. Maria del Mare Ferry,UN,4,,F7ACBC,000000
+16,ACTVs.p.a,11,Chioggia - Pellestrina Cimitero,UN,4,,F7ACBC,000000
+17,ACTVs.p.a,11,Chioggia - Pellestrina Cimitero,UN,4,,F7ACBC,000000
+18,ACTVs.p.a,11,S. Maria del Mare Ferry - Alberoni Faro Rocchetta,UN,4,,F7ACBC,000000
+19,ACTVs.p.a,13,"F.te Nove ""D"" - Treporti",UN,4,,57419A,FFFFFF
+20,ACTVs.p.a,13,"F.te Nove ""D"" - S. Erasmo Chiesa",UN,4,,57419A,FFFFFF
+21,ACTVs.p.a,13,"F.te Nove ""D"" - S. Erasmo Capannone",UN,4,,57419A,FFFFFF
+22,ACTVs.p.a,13,"F.te Nove ""D"" - Treporti",UN,4,,57419A,FFFFFF
+23,ACTVs.p.a,13,"F.te Nove ""D"" - Treporti",UN,4,,57419A,FFFFFF
+24,ACTVs.p.a,13,"F.te Nove ""D"" - S. Erasmo Chiesa",UN,4,,57419A,FFFFFF
+25,ACTVs.p.a,13,"F.te Nove ""D"" - S. Erasmo Chiesa",UN,4,,57419A,FFFFFF
+26,ACTVs.p.a,13,S. Erasmo Capannone - Treporti,UN,4,,57419A,FFFFFF
+27,ACTVs.p.a,13,S. Erasmo Chiesa - Treporti,UN,4,,57419A,FFFFFF
+28,ACTVs.p.a,13,S. Erasmo Chiesa - S. Erasmo Punta Vela,UN,4,,57419A,FFFFFF
+29,ACTVs.p.a,13,"Treporti - F.te Nove ""D""",UN,4,,57419A,FFFFFF
+30,ACTVs.p.a,13,"S. Erasmo Chiesa - F.te Nove ""D""",UN,4,,57419A,FFFFFF
+31,ACTVs.p.a,13,"S. Erasmo Capannone - F.te Nove ""D""",UN,4,,57419A,FFFFFF
+32,ACTVs.p.a,13,"Treporti - F.te Nove ""D""",UN,4,,57419A,FFFFFF
+33,ACTVs.p.a,13,"Treporti - F.te Nove ""D""",UN,4,,57419A,FFFFFF
+34,ACTVs.p.a,13,"S. Erasmo Chiesa - F.te Nove ""D""",UN,4,,57419A,FFFFFF
+35,ACTVs.p.a,13,Treporti - S. Erasmo Capannone,UN,4,,57419A,FFFFFF
+36,ACTVs.p.a,13,Treporti - S. Erasmo Chiesa,UN,4,,57419A,FFFFFF
+37,ACTVs.p.a,13,S. Erasmo Punta Vela - S. Erasmo Chiesa,UN,4,,57419A,FFFFFF
+38,ACTVs.p.a,15,"S. Marco-San Zaccaria ""A"" - Punta Sabbioni ""A""",UN,4,,DD7127,D9D535
+39,ACTVs.p.a,15,"Punta Sabbioni ""A"" - S. Marco-San Zaccaria ""A""",UN,4,,DD7127,D9D535
+40,ACTVs.p.a,16,Fusina - Zattere Gesuati,UN,4,,FBAA2B,000000
+41,ACTVs.p.a,16,Zattere Gesuati - Fusina,UN,4,,FBAA2B,000000
+42,ACTVs.p.a,17,Lido S. Nicolo' Ferry - Tronchetto Ferry,UN,4,,82868C,FFFFFF
+43,ACTVs.p.a,17,Punta Sabbioni Ferry - Lido S. Nicolo' Ferry,UN,4,,82868C,FFFFFF
+44,ACTVs.p.a,17,Tronchetto Ferry - Lido S. Nicolo' Ferry,UN,4,,82868C,FFFFFF
+45,ACTVs.p.a,17,Lido S. Nicolo' Ferry - Punta Sabbioni Ferry,UN,4,,82868C,FFFFFF
+46,ACTVs.p.a,18,Lido S. Nicolo' - Lido S. Nicolo',UN,4,,FFD52B,000000
+47,ACTVs.p.a,18,Murano Navagero - Murano Navagero,UN,4,,FFD52B,000000
+48,ACTVs.p.a,18,Murano Navagero - Lido S. Nicolo',UN,4,,FFD52B,000000
+49,ACTVs.p.a,18,"Lido S. Nicolo' - Murano Colonna ""B""",UN,4,,FFD52B,000000
+50,ACTVs.p.a,18,Lido S. Nicolo' - Lido S. Nicolo',UN,4,,FFD52B,000000
+51,ACTVs.p.a,20,"S. Servolo - S. Marco-San Zaccaria ""B""",UN,4,,C7AAD1,000000
+52,ACTVs.p.a,20,"S. Marco-San Zaccaria ""B"" - Lido S.M.E. ""E""",UN,4,,C7AAD1,000000
+53,ACTVs.p.a,20,"S. Marco-San Zaccaria ""B"" - Lido S.M.E. ""E""",UN,4,,C7AAD1,000000
+54,ACTVs.p.a,20,"Lido S.M.E. ""E"" - S. Marco-San Zaccaria ""B""",UN,4,,C7AAD1,000000
+55,ACTVs.p.a,20,"S. Marco-San Zaccaria ""B"" - S. Marco-San Zaccaria ""B""",UN,4,,C7AAD1,000000
+56,ACTVs.p.a,20,"Lido S.M.E. ""E"" - S. Servolo",UN,4,,C7AAD1,000000
+57,ACTVs.p.a,20,"S. Marco-San Zaccaria ""B"" - S. Marco-San Zaccaria ""B""",UN,4,,C7AAD1,000000
+58,ACTVs.p.a,4.1,"F.te Nove ""B"" - Murano Venier",UN,4,,B43B96,FFFFFF
+59,ACTVs.p.a,4.1,"Murano Museo ""A"" - F.te Nove ""C""",UN,4,,B43B96,FFFFFF
+60,ACTVs.p.a,4.1,"F.te Nove ""B"" - Murano Museo ""A""",UN,4,,B43B96,FFFFFF
+61,ACTVs.p.a,4.1,"Riva de Biasio ""A"" - Murano Museo ""A""",UN,4,,B43B96,FFFFFF
+62,ACTVs.p.a,4.1,"P.le Roma ""E"" - Murano Museo ""A""",UN,4,,B43B96,FFFFFF
+63,ACTVs.p.a,4.1,"Murano Museo ""A"" - S. Giobbe",UN,4,,B43B96,FFFFFF
+64,ACTVs.p.a,4.1,"Riva de Biasio ""A"" - S. Marco-San Zaccaria ""D""",UN,4,,B43B96,FFFFFF
+65,ACTVs.p.a,4.2,"Murano Museo ""B"" - Murano Museo ""B""",UN,4,,B43B96,FFFFFF
+66,ACTVs.p.a,4.2,"Murano Museo ""B"" - S. Marco-San Zaccaria ""C""",UN,4,,B43B96,FFFFFF
+67,ACTVs.p.a,4.2,"P.le Roma ""D"" - Murano Museo ""B""",UN,4,,B43B96,FFFFFF
+68,ACTVs.p.a,4.2,"Murano Venier - F.te Nove ""C""",UN,4,,B43B96,FFFFFF
+69,ACTVs.p.a,4.2,"Murano Venier - F.te Nove ""C""",UN,4,,B43B96,FFFFFF
+70,ACTVs.p.a,4.2,"F.te Nove ""B"" - Murano Museo ""B""",UN,4,,B43B96,FFFFFF
+71,ACTVs.p.a,4.2,"F.te Nove ""B"" - Murano Museo ""B""",UN,4,,B43B96,FFFFFF
+72,ACTVs.p.a,4.2,"P.le Roma ""D"" - F.te Nove ""B""",UN,4,,B43B96,FFFFFF
+73,ACTVs.p.a,4.2,"Murano Museo ""B"" - F.te Nove ""C""",UN,4,,B43B96,FFFFFF
+74,ACTVs.p.a,4.2,"Murano Museo ""B"" - F.te Nove ""C""",UN,4,,B43B96,FFFFFF
+75,ACTVs.p.a,4.2,"Murano Venier - Riva de Biasio ""A""",UN,4,,B43B96,FFFFFF
+76,ACTVs.p.a,4.2,"Murano Museo ""B"" - Riva de Biasio ""A""",UN,4,,B43B96,FFFFFF
+77,ACTVs.p.a,4.2,"F.te Nove ""D"" - Riva de Biasio ""A""",UN,4,,B43B96,FFFFFF
+78,ACTVs.p.a,4.2,"S. Giobbe - Murano Museo ""B""",UN,4,,B43B96,FFFFFF
+79,ACTVs.p.a,4.2,"S. Marco-San Zaccaria ""C"" - Riva de Biasio ""A""",UN,4,,B43B96,FFFFFF
+80,ACTVs.p.a,7,"S. Marco-San Zaccaria ""D"" - S. Marco-San Zaccaria ""D""",UN,4,,009366,FFFFFF
+81,ACTVs.p.a,5.1,"Lido S.M.E. ""A"" - F.te Nove ""C""",UN,4,,8FD2BF,000000
+82,ACTVs.p.a,5.1,"F.te Nove ""C"" - Lido S.M.E. ""B""",UN,4,,8FD2BF,000000
+83,ACTVs.p.a,5.1,"F.te Nove ""C"" - Lido S.M.E. ""A""",UN,4,,8FD2BF,000000
+84,ACTVs.p.a,5.1,"Ferrovia ""C"" - Lido S.M.E. ""B""",UN,4,,8FD2BF,000000
+85,ACTVs.p.a,5.1,"F.te Nove ""C"" - P.le Roma ""G""",UN,4,,8FD2BF,000000
+86,ACTVs.p.a,5.1,"Lido S.M.E. ""A"" - Lido S.M.E. ""A""",UN,4,,8FD2BF,000000
+87,ACTVs.p.a,5.1,"Lido S.M.E. ""A"" - Lido S.M.E. ""A""",UN,4,,8FD2BF,000000
+88,ACTVs.p.a,5.1,"Lido S.M.E. ""A"" - Lido S.M.E. ""A""",UN,4,,8FD2BF,000000
+89,ACTVs.p.a,5.1,"Lido S.M.E. ""A"" - Lido S.M.E. ""B""",UN,4,,8FD2BF,000000
+90,ACTVs.p.a,5.1,"S. Marco-San Zaccaria ""F"" - Lido S.M.E. ""A""",UN,4,,8FD2BF,000000
+91,ACTVs.p.a,5.1,"Lido S.M.E. ""A"" - Lido S.M.E. ""B""",UN,4,,8FD2BF,000000
+92,ACTVs.p.a,5.1,"F.te Nove ""C"" - Lido S.M.E. ""B""",UN,4,,8FD2BF,000000
+93,ACTVs.p.a,5.1,"Lido S.M.E. ""A"" - S. Alvise",UN,4,,8FD2BF,000000
+94,ACTVs.p.a,5.2,"F.te Nove ""D"" - Lido S.M.E. ""A""",UN,4,,8FD2BF,000000
+95,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - F.te Nove ""B""",UN,4,,8FD2BF,000000
+96,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - F.te Nove ""B""",UN,4,,8FD2BF,000000
+97,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - F.te Nove ""B""",UN,4,,8FD2BF,000000
+98,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - Rialto ""D""",UN,4,,8FD2BF,000000
+99,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - Ferrovia ""D""",UN,4,,8FD2BF,000000
+100,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - Lido S.M.E. ""B""",UN,4,,8FD2BF,000000
+101,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - Lido S.M.E. ""B""",UN,4,,8FD2BF,000000
+102,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - Lido S.M.E. ""A""",UN,4,,8FD2BF,000000
+103,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - Lido S.M.E. ""B""",UN,4,,8FD2BF,000000
+104,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - Lido S.M.E. ""B""",UN,4,,8FD2BF,000000
+105,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - Lido S.M.E. ""B""",UN,4,,8FD2BF,000000
+106,ACTVs.p.a,5.2,"Lido S.M.E. ""B"" - Ferrovia ""D""",UN,4,,8FD2BF,000000
+107,ACTVs.p.a,5.2,"S. Alvise - Lido S.M.E. ""A""",UN,4,,8FD2BF,000000
+108,ACTVs.p.a,6,"P.le Roma ""B"" - Lido S.M.E. ""B""",UN,4,,006BB7,FFFFFF
+109,ACTVs.p.a,6,"Lido S.M.E. ""B"" - P.le Roma ""C""",UN,4,,006BB7,FFFFFF
+110,ACTVs.p.a,N,"Punta Sabbioni ""B"" - Lido S.M.E. ""C""",UN,4,,25408D,FFFFFF
+111,ACTVs.p.a,N,"Punta Sabbioni ""B"" - Lido S.M.E. ""C""",UN,4,,25408D,FFFFFF
+112,ACTVs.p.a,N,"Punta Sabbioni ""B"" - Lido S.M.E. ""C""",UN,4,,25408D,FFFFFF
+113,ACTVs.p.a,N,"Lido S.M.E. ""D"" - S. Marco-San Zaccaria ""D""",UN,4,,25408D,FFFFFF
+114,ACTVs.p.a,N,"Lido S.M.E. ""D"" - S. Marco-San Zaccaria ""B""",UN,4,,25408D,FFFFFF
+115,ACTVs.p.a,N,"Rialto ""C"" - S. Marco-San Zaccaria ""D""",UN,4,,25408D,FFFFFF
+116,ACTVs.p.a,N,"Lido S.M.E. ""D"" - Tronchetto ""A""",UN,4,,25408D,FFFFFF
+117,ACTVs.p.a,N,"Rialto ""C"" - Tronchetto ""A""",UN,4,,25408D,FFFFFF
+118,ACTVs.p.a,N,"Lido S.M.E. ""D"" - S. Marco-San Zaccaria ""E""",UN,4,,25408D,FFFFFF
+119,ACTVs.p.a,N,"Lido S.M.E. ""C"" - Punta Sabbioni ""B""",UN,4,,25408D,FFFFFF
+120,ACTVs.p.a,N,"S. Marco-San Zaccaria ""D"" - Tronchetto ""B""",UN,4,,25408D,FFFFFF
+121,ACTVs.p.a,N,"S. Marco-San Zaccaria ""F"" - Lido S.M.E. ""D""",UN,4,,25408D,FFFFFF
+122,ACTVs.p.a,N,"S. Marco-San Zaccaria ""D"" - Lido S.M.E. ""D""",UN,4,,25408D,FFFFFF
+123,ACTVs.p.a,N,"S. Marco-San Zaccaria ""D"" - Rialto ""D""",UN,4,,25408D,FFFFFF
+124,ACTVs.p.a,N,"Tronchetto ""B"" - Lido S.M.E. ""D""",UN,4,,25408D,FFFFFF
+125,ACTVs.p.a,N,"S. Marco-San Zaccaria ""D"" - P.le Roma ""F""",UN,4,,25408D,FFFFFF
+126,ACTVs.p.a,NLN,"F.te Nove ""D"" - Treporti",UN,4,,25408D,FFFFFF
+127,ACTVs.p.a,NLN,"F.te Nove ""D"" - Treporti",UN,4,,25408D,FFFFFF
+128,ACTVs.p.a,NLN,"F.te Nove ""D"" - Punta Sabbioni ""A""",UN,4,,25408D,FFFFFF
+129,ACTVs.p.a,NLN,"F.te Nove ""D"" - Burano ""C""",UN,4,,25408D,FFFFFF
+130,ACTVs.p.a,NLN,"F.te Nove ""D"" - S. Erasmo Capannone",UN,4,,25408D,FFFFFF
+131,ACTVs.p.a,NLN,"Burano ""B"" - Punta Sabbioni ""A""",UN,4,,25408D,FFFFFF
+132,ACTVs.p.a,NLN,"Burano ""B"" - Treporti",UN,4,,25408D,FFFFFF
+133,ACTVs.p.a,NLN,"F.te Nove ""D"" - S.Erasmo Cap. A RICHIESTA",UN,4,,25408D,FFFFFF
+134,ACTVs.p.a,NLN,"Treporti - F.te Nove ""D""",UN,4,,25408D,FFFFFF
+135,ACTVs.p.a,NLN,"Burano ""C"" - Tronchetto Mercato",UN,4,,25408D,FFFFFF
+136,ACTVs.p.a,NLN,"Burano ""C"" - F.te Nove ""D""",UN,4,,25408D,FFFFFF
+137,ACTVs.p.a,NLN,"Treporti - Burano ""B""",UN,4,,25408D,FFFFFF
+138,ACTVs.p.a,NLN,"Punta Sabbioni ""A"" - Burano ""C""",UN,4,,25408D,FFFFFF
+139,ACTVs.p.a,NLN,"Punta Sabbioni ""A"" - F.te Nove ""D""",UN,4,,25408D,FFFFFF
+140,ACTVs.p.a,NMU,"F.te Nove ""B"" - F.te Nove ""B""",UN,4,,25408D,FFFFFF
+141,ACTVs.p.a,NMU,"F.te Nove ""B"" - F.te Nove ""B""",UN,4,,25408D,FFFFFF
+142,ACTVs.p.a,9,"Burano ""A"" - Torcello",UN,4,,948F03,FFFFFF
+143,ACTVs.p.a,9,"Torcello - Burano ""A""",UN,4,,948F03,FFFFFF
+144,ACTVs.p.a,22,"Punta Sabbioni ""A"" - F.te Nove ""C""",UN,4,,C4C130,00646A
+145,ACTVs.p.a,22,"Punta Sabbioni ""A"" - S. Giobbe",UN,4,,C4C130,00646A
+146,ACTVs.p.a,22,"S. Giobbe - Punta Sabbioni ""A""",UN,4,,C4C130,00646A
+147,ACTVs.p.a,14,"S. Marco-San Zaccaria ""A"" - Burano ""B""",UN,4,,F37736,000000
+148,ACTVs.p.a,14,"S. Marco-San Zaccaria ""A"" - Punta Sabbioni ""B""",UN,4,,F37736,000000
+149,ACTVs.p.a,14,"S. Marco-San Zaccaria ""A"" - Burano ""C""",UN,4,,F37736,000000
+150,ACTVs.p.a,14,"S. Marco-San Zaccaria ""F"" - Punta Sabbioni ""B""",UN,4,,F37736,000000
+151,ACTVs.p.a,14,"S. Marco-San Zaccaria ""A"" - Punta Sabbioni ""B""",UN,4,,F37736,000000
+152,ACTVs.p.a,14,"Burano ""B"" - S. Marco-San Zaccaria ""A""",UN,4,,F37736,000000
+153,ACTVs.p.a,14,"Punta Sabbioni ""B"" - S. Marco-San Zaccaria ""A""",UN,4,,F37736,000000
+154,ACTVs.p.a,14,"Burano ""B"" - S. Marco-San Zaccaria ""A""",UN,4,,F37736,000000
+155,ACTVs.p.a,14,"Punta Sabbioni ""B"" - S. Marco-San Zaccaria ""A""",UN,4,,F37736,000000
+156,ACTVs.p.a,14,"Punta Sabbioni ""B"" - S. Marco-San Zaccaria ""A""",UN,4,,F37736,000000
+157,ACTVs.p.a,14,"Punta Sabbioni ""B"" - S. Marco-San Zaccaria ""F""",UN,4,,F37736,000000
+158,ACTVs.p.a,2,"S. Marco-San Zaccaria ""B"" - Lido S.M.E. ""E""",UN,4,,FF0000,FFFFFF
+159,ACTVs.p.a,2,"S. Marco-San Zaccaria ""B"" - S. Marco Giardinetti ""A""",UN,4,,FF0000,FFFFFF
+160,ACTVs.p.a,2,"S. Marco-San Zaccaria ""B"" - Rialto ""D""",UN,4,,FF0000,FFFFFF
+161,ACTVs.p.a,2,"S. Marco-San Zaccaria ""B"" - Rialto ""D""",UN,4,,FF0000,FFFFFF
+162,ACTVs.p.a,2,"S. Marco-San Zaccaria ""B"" - P.le Roma ""F""",UN,4,,FF0000,FFFFFF
+163,ACTVs.p.a,2,"S. Marco-San Zaccaria ""B"" - S. Marco Giardinetti ""A""",UN,4,,FF0000,FFFFFF
+164,ACTVs.p.a,2,"Lido S.M.E. ""E"" - S. Marco-San Zaccaria ""B""",UN,4,,FF0000,FFFFFF
+165,ACTVs.p.a,2,"Rialto ""C"" - S. Marco-San Zaccaria ""B""",UN,4,,FF0000,FFFFFF
+166,ACTVs.p.a,2,"P.le Roma ""G"" - S. Marco-San Zaccaria ""B""",UN,4,,FF0000,FFFFFF
+167,ACTVs.p.a,2,"S. Marco Giardinetti ""A"" - S. Marco-San Zaccaria ""B""",UN,4,,FF0000,FFFFFF
+168,ACTVs.p.a,2,"S. Marco Giardinetti ""A"" - S. Marco-San Zaccaria ""D""",UN,4,,FF0000,FFFFFF
+169,ACTVs.p.a,8,S. Basilio - Lido S. Nicolo',UN,4,,82683B,FFFFFF
+170,ACTVs.p.a,8,Lido S. Nicolo' - S. Basilio,UN,4,,82683B,FFFFFF
+171,ACTVs.p.a,10,"Lido S.M.E. ""E"" - Zattere ""B""",UN,4,,4DC8E9,000000
+172,ACTVs.p.a,10,"Lido S.M.E. ""E"" - S. Marco Giardinetti ""A""",UN,4,,4DC8E9,000000
+173,ACTVs.p.a,10,"Zattere ""B"" - Lido S.M.E. ""E""",UN,4,,4DC8E9,000000
+174,ACTVs.p.a,10,"Zattere ""B"" - Lido S.M.E. ""E""",UN,4,,4DC8E9,000000
+175,ACTVs.p.a,12,"Punta Sabbioni ""A"" - F.te Nove ""A""",UN,4,,DAD635,000000
+176,ACTVs.p.a,12,"Treporti - F.te Nove ""A""",UN,4,,DAD635,000000
+177,ACTVs.p.a,12,"Treporti - F.te Nove ""A""",UN,4,,DAD635,000000
+178,ACTVs.p.a,12,"Treporti - F.te Nove ""A""",UN,4,,DAD635,000000
+179,ACTVs.p.a,12,"Burano ""C"" - F.te Nove ""A""",UN,4,,DAD635,000000
+180,ACTVs.p.a,12,"Burano ""C"" - F.te Nove ""A""",UN,4,,DAD635,000000
+181,ACTVs.p.a,12,"Punta Sabbioni ""A"" - F.te Nove ""A""",UN,4,,DAD635,000000
+182,ACTVs.p.a,12,"Punta Sabbioni ""A"" - F.te Nove ""A""",UN,4,,DAD635,000000
+183,ACTVs.p.a,12,"Burano ""C"" - F.te Nove ""A""",UN,4,,DAD635,000000
+184,ACTVs.p.a,12,"Burano ""C"" - F.te Nove ""A""",UN,4,,DAD635,000000
+185,ACTVs.p.a,12,"Treporti - F.te Nove ""A""",UN,4,,DAD635,000000
+186,ACTVs.p.a,12,"Burano ""C"" - F.te Nove ""A""",UN,4,,DAD635,000000
+187,ACTVs.p.a,12,"F.te Nove ""A"" - Punta Sabbioni ""A""",UN,4,,DAD635,000000
+188,ACTVs.p.a,12,"F.te Nove ""A"" - Treporti",UN,4,,DAD635,000000
+189,ACTVs.p.a,12,"F.te Nove ""A"" - Treporti",UN,4,,DAD635,000000
+190,ACTVs.p.a,12,"F.te Nove ""A"" - Treporti",UN,4,,DAD635,000000
+191,ACTVs.p.a,12,"F.te Nove ""A"" - Burano ""C""",UN,4,,DAD635,000000
+192,ACTVs.p.a,12,"F.te Nove ""A"" - Burano ""C""",UN,4,,DAD635,000000
+193,ACTVs.p.a,12,"Murano Faro ""A"" - Burano ""B""",UN,4,,DAD635,000000
+194,ACTVs.p.a,12,"F.te Nove ""A"" - Punta Sabbioni ""A""",UN,4,,DAD635,000000
+195,ACTVs.p.a,12,"F.te Nove ""A"" - Burano ""C""",UN,4,,DAD635,000000
+196,ACTVs.p.a,12,"F.te Nove ""A"" - Burano ""C""",UN,4,,DAD635,000000
+197,ACTVs.p.a,12,"F.te Nove ""A"" - Punta Sabbioni ""A""",UN,4,,DAD635,000000
+198,ACTVs.p.a,12,"F.te Nove ""A"" - Burano ""C""",UN,4,,DAD635,000000
+199,ACTVs.p.a,2/,"P.le Roma ""F"" - Rialto ""D""",UN,4,,FF0000,FFFFFF
+200,ACTVs.p.a,2/,"Rialto ""C"" - P.le Roma ""G""",UN,4,,FF0000,FFFFFF
+204,ACTVs.p.a,NM,S. Giobbe - S. Giobbe,UN,4,,FFFFFF,000000
+205,ACTVs.p.a,NM,S. Giobbe - S. Giobbe,UN,4,,FFFFFF,000000
