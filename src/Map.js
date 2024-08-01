@@ -1569,11 +1569,31 @@ function MapComponent() {
       handleButtonClick(tripDetails.routeShortName);
    };
 
+   // shadow-sm
+
    return (
       <div className="map-page">
          <div className="header-container">
-            <div className="container mt-4 mb-2 p-3 rounded shadow-sm custom-container">
-               <div className="row align-items-center justify-content-center no-gutters">
+            <div className="mt-4 mb-2 p-3 rounded custom-container">
+               <div className="image-container">
+                  <a href="https://serendpt.net">
+                     <img
+                        src="/SerenDPTLOGO Black.png"
+                        alt="SerenDPT"
+                        width="80"
+                        height="80"
+                     />
+                  </a>
+                  <a href="https://veniceprojectcenter.org">
+                     <img
+                        src="VPCsquare.png"
+                        alt="Venice Project Center"
+                        width="80"
+                        height="80"
+                     />
+                  </a>
+               </div>
+               <div className="row align-items-center justify-content-center no-gutters controlbox">
                   <div className="col-4 col-md-2 d-flex flex-column align-items-center px-1">
                      <select
                         className="form-control rounded custom-input"
@@ -1633,7 +1653,7 @@ function MapComponent() {
                {earliestTripDetails && (
                   <div className="row mt-4 justify-content-center">
                      <div className="col-md-6 d-flex justify-content-center">
-                        <p>
+                        <p className="blackthingontheright">
                            Linea {earliestTripDetails.routeShortName},{" "}
                            {earliestTripDetails.routeLongName}
                         </p>
@@ -1643,7 +1663,9 @@ function MapComponent() {
                {noLinesFound && (
                   <div className="row mt-4 justify-content-center">
                      <div className="col-md-6 d-flex justify-content-center">
-                        <p>Nessuna linea trovata</p>
+                        <p className="blackthingontheright">
+                           Nessuna linea trovata
+                        </p>
                      </div>
                   </div>
                )}
@@ -1737,6 +1759,23 @@ function MapComponent() {
             <div className="map-container">
                <div ref={mapRef} className="map" />
             </div>
+         </div>
+
+         <div className="footer">
+            <p>
+               {" "}
+               Created by{" "}
+               <a
+                  href="https://www.linkedin.com/in/gabriele-armani-052422235?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BsQW%2FPtG2RJeD9Oz3sYg1uA%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-link"
+               >
+                  {" "}
+                  Gabriele Armani{" "}
+               </a>{" "}
+               under SerenDPT{" "}
+            </p>
          </div>
       </div>
    );

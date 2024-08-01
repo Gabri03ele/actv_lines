@@ -13,16 +13,25 @@ body {
 
 .header-container {
    margin-bottom: 10px;
-   background-color: #c80815;
+   background-color: #ffffff;
+   border-bottom: 1px solid #c80815;
 }
 
 .custom-container {
-   background-color: #c80815;
    border-radius: 10px;
-   max-width: 500px;
+   max-width: none;
    margin: auto;
+   flex-direction: row;
+   display: flex;
    padding: 15px;
    color: white;
+   justify-content: center;
+   border-bottom-color: #c80815;
+   border-radius: 2px; /* Optional: Slightly rounded corners */
+}
+
+.controlbox {
+   width: 80%;
 }
 
 .map-page-content {
@@ -83,7 +92,42 @@ body {
    border: black !important;
 }
 
+.image-container {
+   display: flex;
+   align-items: center; /* Center images horizontally */
+   margin-right: 20px; /* Space between images and content */
+}
+
+.image-container img {
+   margin-bottom: 10px; /* Space between images */
+}
+
+.image-container {
+   display: flex;
+   flex-direction: row; /* Stack images vertically */
+   align-items: center; /* Center images horizontally */
+   margin-right: 20px; /* Space between images and content */
+}
+
 .custom-input {
-   border: 1px solid #ffc80a !important;
-   border-radius: 0.25rem;
+   border-color: #c80815 !important;
+}
+
+.blackthingontheright {
+   color: black;
+}
+
+.footer {
+   text-align: center; /* Center-align text */
+   border-top: 1px solid #c80815; /* Set the border-top with color and thickness */
+   padding: 10px; /* Add padding inside the footer */
+   margin-top: 20px; /* Add space above the footer */
+   border-radius: 2px; /* Optional: Slightly rounded corners */
+   background-color: #f8f9fa; /* Optional: Light background color */
+   color: #c80815;
+}
+
+.footer-link {
+   color: #c80815; /* LinkedIn blue color or any color you prefer */
+   text-decoration: none; /* Removes underline from the link */
 }
