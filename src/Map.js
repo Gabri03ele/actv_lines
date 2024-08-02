@@ -1571,6 +1571,43 @@ function MapComponent() {
 
    // shadow-sm
 
+   const routeColors = {
+      1: { background: "#FFFFFF", text: "#000000" },
+      11: { background: "#F7ACBC", text: "#000000" },
+      13: { background: "#57419A", text: "#FFFFFF" },
+      15: { background: "#DD7127", text: "#D9D535" },
+      16: { background: "#FBAA2B", text: "#000000" },
+      17: { background: "#82868C", text: "#FFFFFF" },
+      18: { background: "#FFD52B", text: "#000000" },
+      20: { background: "#C7AAD1", text: "#000000" },
+      4.1: { background: "#B43B96", text: "#FFFFFF" },
+      4.2: { background: "#B43B96", text: "#FFFFFF" },
+      7: { background: "#9366", text: "#FFFFFF" },
+      5.1: { background: "#8FD2BF", text: "#000000" },
+      5.2: { background: "#8FD2BF", text: "#000000" },
+      6: { background: "#006BB7", text: "#FFFFFF" },
+      N: { background: "#25408D", text: "#FFFFFF" },
+      NLN: { background: "#25408D", text: "#FFFFFF" },
+      NMU: { background: "#25408D", text: "#FFFFFF" },
+      9: { background: "#948F03", text: "#FFFFFF" },
+      22: { background: "#C4C130", text: "#00646A" },
+      14: { background: "#F37736", text: "#000000" },
+      2: { background: "#FF0000", text: "#FFFFFF" },
+      8: { background: "#82683B", text: "#FFFFFF" },
+      10: { background: "#4DC8E9", text: "#000000" },
+      12: { background: "#DAD635", text: "#000000" },
+      "2/": { background: "#FF0000", text: "#FFFFFF" },
+      NM: { background: "#FFFFFF", text: "#000000" },
+   };
+
+   const buttonColors = {
+      mostraTutteFermate: { background: "#007bff", text: "#ffffff" }, // Blue button
+      mostraPosizione: { background: "#28a745", text: "#ffffff" }, // Green button
+      nascondiPosizione: { background: "#ffc107", text: "#000000" }, // Yellow button
+      impostaPosizione: { background: "#17a2b8", text: "#ffffff" }, // Teal button
+      rimuoviPosizione: { background: "#dc3545", text: "#ffffff" }, // Red button
+   };
+
    return (
       <div className="map-page">
          <div className="header-container">
@@ -1674,19 +1711,32 @@ function MapComponent() {
 
          <div className="map-page-content">
             <div className="sidebar">
-               <div className="container mt-4 ">
+               <div className="container mt-4">
                   <button
-                     label=" Mostra tutte le fermate"
                      className="btn btn-primary m-2 w-100"
                      onClick={handletutteFermate}
+                     style={{
+                        backgroundColor:
+                           buttonColors.mostraTutteFermate.background,
+                        color: buttonColors.mostraTutteFermate.text,
+                        border: "1px solid #000000",
+                     }}
                   >
-                     {" "}
-                     Mostra tutte le fermate{" "}
+                     Mostra tutte le fermate
                   </button>
                   <br />
                   <button
                      className="btn btn-primary m-2 w-100"
                      onClick={toggleUserLocation}
+                     style={{
+                        backgroundColor: isLocationVisible
+                           ? buttonColors.nascondiPosizione.background
+                           : buttonColors.mostraPosizione.background,
+                        color: isLocationVisible
+                           ? buttonColors.nascondiPosizione.text
+                           : buttonColors.mostraPosizione.text,
+                        border: "1px solid #000000",
+                     }}
                   >
                      {isLocationVisible
                         ? "Nascondi Posizione"
@@ -1695,64 +1745,88 @@ function MapComponent() {
                   <button
                      className="btn btn-secondary m-2 w-100"
                      onClick={enableMapClick}
+                     style={{
+                        backgroundColor:
+                           buttonColors.impostaPosizione.background,
+                        color: buttonColors.impostaPosizione.text,
+                        border: "1px solid #000000",
+                     }}
                   >
                      Imposta Posizione
                   </button>
                   <button
                      className="btn btn-danger m-2 w-100"
                      onClick={clearUserLocationLayer}
+                     style={{
+                        backgroundColor:
+                           buttonColors.rimuoviPosizione.background,
+                        color: buttonColors.rimuoviPosizione.text,
+                        border: "1px solid #000000",
+                     }}
                   >
                      Rimuovi Posizione
                   </button>
 
                   <h2>Linee attive</h2>
-                  {Object.keys(enrichedTrip).map((numeroBattello) => (
-                     <div key={numeroBattello} className="mb-3">
-                        <Button
-                           variant="primary"
-                           className="w-100"
-                           onClick={() => handleButtonClick(numeroBattello)}
-                           aria-controls={`collapse-${numeroBattello}`}
-                           aria-expanded={
-                              selectedRouteShortName === numeroBattello
-                           }
-                        >
-                           Linea {numeroBattello}
-                        </Button>
-                        <Collapse
-                           in={selectedRouteShortName === numeroBattello}
-                        >
-                           <div id={`collapse-${numeroBattello}`}>
-                              <Card className="mt-2">
-                                 <Card.Body>
-                                    <ListGroup>
-                                       {longNameOptions.map(
-                                          (longName, index) => (
-                                             <ListGroup.Item
-                                                key={index}
-                                                action
-                                                onClick={() =>
-                                                   handleLongNameClick(longName)
-                                                }
-                                                className={
-                                                   selectedLongNames.has(
-                                                      longName
-                                                   )
-                                                      ? "selected-item"
-                                                      : ""
-                                                }
-                                             >
-                                                {longName}
-                                             </ListGroup.Item>
-                                          )
-                                       )}
-                                    </ListGroup>
-                                 </Card.Body>
-                              </Card>
-                           </div>
-                        </Collapse>
-                     </div>
-                  ))}
+                  {Object.keys(enrichedTrip).map((numeroBattello) => {
+                     const { background, text } = routeColors[
+                        numeroBattello
+                     ] || { background: "#000000", text: "#FFFFFF" };
+                     return (
+                        <div key={numeroBattello} className="mb-3">
+                           <Button
+                              variant="primary"
+                              className="w-100"
+                              onClick={() => handleButtonClick(numeroBattello)}
+                              aria-controls={`collapse-${numeroBattello}`}
+                              aria-expanded={
+                                 selectedRouteShortName === numeroBattello
+                              }
+                              style={{
+                                 backgroundColor: background,
+                                 color: text,
+                                 border: "1px solid #000000",
+                              }}
+                           >
+                              Linea {numeroBattello}
+                           </Button>
+                           <Collapse
+                              in={selectedRouteShortName === numeroBattello}
+                           >
+                              <div id={`collapse-${numeroBattello}`}>
+                                 <Card className="mt-2">
+                                    <Card.Body>
+                                       <ListGroup>
+                                          {longNameOptions.map(
+                                             (longName, index) => (
+                                                <ListGroup.Item
+                                                   key={index}
+                                                   action
+                                                   onClick={() =>
+                                                      handleLongNameClick(
+                                                         longName
+                                                      )
+                                                   }
+                                                   className={
+                                                      selectedLongNames.has(
+                                                         longName
+                                                      )
+                                                         ? "selected-item"
+                                                         : ""
+                                                   }
+                                                >
+                                                   {longName}
+                                                </ListGroup.Item>
+                                             )
+                                          )}
+                                       </ListGroup>
+                                    </Card.Body>
+                                 </Card>
+                              </div>
+                           </Collapse>
+                        </div>
+                     );
+                  })}
                </div>
             </div>
 
