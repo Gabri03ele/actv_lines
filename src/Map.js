@@ -1,46 +1,48 @@
-import React, { useEffect, useRef, useCallback, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import MapView from "@arcgis/core/views/MapView";
 import Map from "@arcgis/core/Map";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import Graphic from "@arcgis/core/Graphic";
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol";
-// import PopupTemplate from "@arcgis/core/PopupTemplate";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import SimpleRenderer from "@arcgis/core/renderers/SimpleRenderer";
 import DefaultUI from "@arcgis/core/views/ui/DefaultUI";
 import Zoom from "@arcgis/core/widgets/Zoom";
 import SimpleLineSymbol from "@arcgis/core/symbols/SimpleLineSymbol";
-// import SimpleMarkerSymbol from "@arcgis/core/symbols/SimpleMarkerSymbol";
 import Point from "@arcgis/core/geometry/Point";
 import Papa from "papaparse";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Collapse, Card, ListGroup } from "react-bootstrap";
+import {Button, Card, Collapse, ListGroup} from "react-bootstrap";
 
 function MapComponent() {
+   // Riferimenti alla mappa e alla posizione dell'utente
    const mapRef = useRef(null);
    const mapViewRef = useRef(null);
-
-   const userLocationLayerRef = useRef(
-      new GraphicsLayer({ id: "userLocationLayer" })
-   );
-   const [userLocation, setUserLocation] = useState(null);
-   const [isLocationVisible, setIsLocationVisible] = useState(false);
-   const markerRef = useRef(null);
+   const userLocationLayerRef = useRef(new GraphicsLayer({ id: "userLocationLayer" }));
+   const userMarkerRef = useRef(null);
    const canClickMapRef = useRef(false);
 
-   const [tutteFermate, setTutteFermate] = useState(false); // stato per mostrare il layer con tutte le fermata
-   const [shapeAttive, setShapeAttive] = useState([]);
+   // Stato per mostrare la posizione dell'utente
+   const [userLocation, setUserLocation] = useState(null);
+   const [isLocationVisible, setIsLocationVisible] = useState(false);
 
-   const [TRIPDACONSIDERARE, setTRIPDACONSIDERARE] = useState([]);
+   const [animationGraphicsLayer, setAnimationGraphicsLayer] = useState(null);
+
+   // stato per mostrare il layer con tutte le fermata
+   const [allStops, setAllStops] = useState(false);
+   const [activeShapes, setActiveShapes] = useState([]);
+
+   const [tripsToConsider, setTripsToConsider] = useState([]);
 
    const [validTrips, setValidTrips] = useState({});
+   const [validTripsId, setValidTripsId] = useState([]);
    const [enrichedTrip, setEnrichedTrip] = useState({}); // stato che mi raggruppa stessi numeri di linea
+   const [noLinesFound, setNoLinesFound] = useState(false);
+
    const [selectedRouteShortName, setSelectedRouteShortName] = useState(null); // stato per capire quale numero di linea è selezionato
    const [longNameOptions, setLongNameOptions] = useState([]); // stato per capire da dove uno parte (successivo al numero di linea selezionato)
    const [selectedLongNames, setSelectedLongNames] = useState(new Set());
-   const [validTripsId, setValidTripsId] = useState([]);
-   const [noLinesFound, setNoLinesFound] = useState(false);
 
    // Stati per memorizzare il contenuto dei file Actv
    const [tripsData, setTripsData] = useState([]);
@@ -54,6 +56,7 @@ function MapComponent() {
    const [endPoint, setEndPoint] = useState(null);
 
    const [currentTime, setCurrentTime] = useState(getCurrentTime());
+
    function getCurrentTime() {
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, "0");
@@ -61,7 +64,7 @@ function MapComponent() {
       return `${hours}:${minutes}`; // HH:MM
    }
 
-   // quando cambio il tempo resetto tutto e rimuovo tutto quello sulla mappa
+   // quando cambio l'orario resetto tutto e rimuovo tutto quello presente sulla mappa
    const handleTimeChange = (event) => {
       const view = mapViewRef.current;
 
@@ -89,9 +92,7 @@ function MapComponent() {
       setCurrentTime(event.target.value);
    };
 
-   const [animationGraphicsLayer, setAnimationGraphicsLayer] = useState(null);
-
-   // funzione per inizializzare la mappa: basemap, centrata su venezia e i 2 layer principali
+   // funzione per inizializzare la mappa: basemap, centrata su venezia e i 2 layer principali, fermate e rotte
    const initializeMap = useCallback(async () => {
       if (mapViewRef.current) return;
 
@@ -128,6 +129,7 @@ function MapComponent() {
       view.map.add(graphicsLayer);
       setAnimationGraphicsLayer(graphicsLayer);
 
+      // immagine personalizzata per visualizzare le rotte
       const customLineSymbol = new SimpleLineSymbol({
          color: [128, 0, 128],
          width: 1.5,
@@ -137,7 +139,7 @@ function MapComponent() {
          symbol: customLineSymbol,
       });
 
-      // layer contenente tutte le linee (shapes)
+      // layer contenente tutte le rotte (shapes)
       const linesUrl =
          "https://services7.arcgis.com/BEVijU9IvwRENrmx/arcgis/rest/services/combined_output/FeatureServer/0";
       const linesFeatureLayer = new FeatureLayer({
@@ -149,13 +151,13 @@ function MapComponent() {
       });
       map.add(linesFeatureLayer);
 
+      // immagine personalizzata per visualizzare le fermate
       const customSymbol = new PictureMarkerSymbol({
          url: "/stop.png",
          width: "16px",
          height: "16px",
       });
-
-      const renderer = new SimpleRenderer({
+      const stopsRenderer = new SimpleRenderer({
          symbol: customSymbol,
       });
       const popupTemplate = {
@@ -169,9 +171,9 @@ function MapComponent() {
          url: stopsUrl,
          id: "stopsFeatureLayer",
          title: "Mostra tutte le fermate",
-         visible: tutteFermate,
+         visible: allStops,
 
-         renderer: renderer,
+         renderer: stopsRenderer,
          popupTemplate: popupTemplate,
       });
 
@@ -181,16 +183,16 @@ function MapComponent() {
       map.reorder(linesFeatureLayer, 0);
       map.reorder(stopsFeatureLayer, 1);
 
-      // funzione per lasciar l'utente scegliere il suo punto di partenza
+      // funzione per lasciare l'utente scegliere la sua posizione attuale
       const handleClick = (event) => {
          if (canClickMapRef.current) {
             const { mapPoint } = event;
 
-            // Rimuove il marker se già presente
-            if (markerRef.current) {
-               userLocationLayerRef.current.remove(markerRef.current);
-               view.graphics.remove(markerRef.current);
-               markerRef.current = null;
+            // Rimuove il marker della posizione (se già presente)
+            if (userMarkerRef.current) {
+               userLocationLayerRef.current.remove(userMarkerRef.current);
+               view.graphics.remove(userMarkerRef.current);
+               userMarkerRef.current = null;
             }
 
             const newMarker = new Graphic({
@@ -204,7 +206,7 @@ function MapComponent() {
 
             // imposto il punto come posizione dell'utente
             view.graphics.add(newMarker);
-            markerRef.current = newMarker;
+            userMarkerRef.current = newMarker;
             setUserLocation({
                latitude: mapPoint.latitude,
                longitude: mapPoint.longitude,
@@ -215,7 +217,7 @@ function MapComponent() {
                userLocationLayerRef.current.add(newMarker);
             }
 
-            // 1 click al massimo disponibile
+            // 1 click al massimo disponibile per ogni volta che voglio impostare la posizione
             canClickMapRef.current = false;
          }
       };
@@ -230,7 +232,7 @@ function MapComponent() {
             mapViewRef.current = null;
          }
       };
-   }, [tutteFermate]);
+   }, [allStops]);
 
    useEffect(() => {
       initializeMap();
@@ -261,6 +263,7 @@ function MapComponent() {
       }
    };
 
+   // funzione per poter premere sulla mappa, e poter impostare la posizione attuale dove si vuole
    const enableMapClick = () => {
       const view = mapViewRef.current;
       if (!view) return;
@@ -283,7 +286,7 @@ function MapComponent() {
 
       if (mapViewRef.current) {
          mapViewRef.current.graphics.removeAll();
-         markerRef.current = null;
+         userMarkerRef.current = null;
       }
    };
 
@@ -345,7 +348,7 @@ function MapComponent() {
       });
    };
 
-   // Funzione per scaricare i file ACTV da cui prendere i dati
+   // Funzione per caricare i file ACTV da cui prendere i dati
    const fetchAndParseCsv = async (filePath) => {
       const response = await fetch(filePath);
       if (!response.ok) {
@@ -367,16 +370,14 @@ function MapComponent() {
       }).data;
    };
 
-   // Funzione per scaricare i file Actv da cui prendere i dati
+   // Funzione per scaricare i dati
    const fetchData = useCallback(async () => {
       try {
          const trips = await fetchAndParseCsv("/actv_nav_583/trips.txt");
          const routes = await fetchAndParseCsv("/actv_nav_583/routes.txt");
          const stops = await fetchAndParseCsv("/actv_nav_583/stops.txt");
          const shapes = await fetchAndParseCsv("/actv_nav_583/shapes.txt");
-         const stopTimes = await fetchAndParseCsv(
-            "/actv_nav_583/stop_times.txt"
-         );
+         const stopTimes = await fetchAndParseCsv("/actv_nav_583/stop_times.txt");
 
          setTripsData(trips);
          setRoutesData(routes);
@@ -397,7 +398,7 @@ function MapComponent() {
       const mapView = mapViewRef.current;
       const featureLayer = mapView.map.findLayerById("linesFeatureLayer");
 
-      // caso in cui non si è selezionato nulla
+      // caso in cui non si è selezionato nulla centro la visuale su Venezia
       if (shapeIds.length === 0) {
          mapView.goTo(
             {
@@ -433,7 +434,7 @@ function MapComponent() {
       }
    };
 
-   // raggruppa i dati di "stopTimesData" in base al trip_id
+   // raggruppo i dati di "stopTimesData" in base al trip_id
    const groupStopTimesByTrip = (stopTimesData) => {
       return stopTimesData.reduce((acc, row) => {
          if (!acc[row.trip_id]) {
@@ -446,6 +447,7 @@ function MapComponent() {
          }
          acc[row.trip_id].stop_times.push(row);
 
+         // per ciascun trip prendo l'orario di arrivo "più presto" e l'orario di partenza "più tardi"
          if (row.arrival_time < acc[row.trip_id].first_arrival_time) {
             acc[row.trip_id].first_arrival_time = row.arrival_time;
          }
@@ -458,7 +460,7 @@ function MapComponent() {
       }, {});
    };
 
-   // funzione per capire il giorno di servizio
+   // funzione per capire il giorno di servizio in base al giorno della settimana
    const getServiceIdForDay = (day) => {
       const serviceIdMap = {
          0: "470503_000",
@@ -472,8 +474,9 @@ function MapComponent() {
       return serviceIdMap[day];
    };
 
-   // funzione che aggiunge ai trip 2 infromazioni: route_short_name e route_long_name
-   const enrichTripsWithRouteInfo = (trips, routes) => {
+   // funzione che aggiunge a ciascun "trip" 2 informazioni prese da "route": route_short_name e route_long_name
+   const enrichTripsWithShortAndLongName = (trips, routes) => {
+      // Mappo a ciascun route_id il rispettivo route_short_name e route_long_name usando una mappa
       const routeMap = routes.reduce((map, route) => {
          map[route.route_id] = {
             route_short_name: route.route_short_name,
@@ -482,6 +485,7 @@ function MapComponent() {
          return map;
       }, {});
 
+      // A ciascun trip trovo la chiave corrispondente nell'oggetto appena creato e ci aggiungo le informazioni
       return trips.map((trip) => {
          const routeInfo = routeMap[trip.route_id] || {};
          return {
@@ -492,8 +496,8 @@ function MapComponent() {
       });
    };
 
-   // funzione che raggruppa i trip in base al route_id
-   const groupTripsByRoute = (trips) => {
+   // funzione che raggruppa i "trip" in base al "route_id"
+   const groupTripsByRouteId = (trips) => {
       return trips.reduce((groups, trip) => {
          const { route_short_name } = trip;
          if (!groups[route_short_name]) {
@@ -504,7 +508,7 @@ function MapComponent() {
       }, {});
    };
 
-   // funzione che mi raccoglie i trip validi sia per giorno di servizio che per orario
+   // funzione che mi raccoglie i "trip" validi al momento corrente basandosi sul giorno di servizio e sull'orario
    const getCurrentTrip = useCallback(() => {
       const filterValidTripsByTime = (
          stopTimesByTrip,
@@ -519,8 +523,8 @@ function MapComponent() {
                   trip.last_departure_time
                );
                return (
-                  currentTimeInMinutes >= firstArrivalInMinutes &&
-                  currentTimeInMinutes <= lastDepartureInMinutes
+                  currentTimeInMinutes > firstArrivalInMinutes &&
+                  currentTimeInMinutes < lastDepartureInMinutes
                );
             })
             .map((trip) => trip.trip_id);
@@ -532,7 +536,7 @@ function MapComponent() {
          if (hours >= 24) {
             hours -= 24;
          }
-         return hours * 60 + minutes; // Convert hours and minutes to total minutes
+         return hours * 60 + minutes; // convertiamo tutto in miunuti
       };
 
       const now = new Date();
@@ -541,32 +545,33 @@ function MapComponent() {
       const currentTimeInMinutes = timeToMinutes(currentTime);
       const serviceId = getServiceIdForDay(currentDay);
 
-      const filteredTripsDataByServiceId = tripsData
+      // prendo i "trip_id" in base al giorno di servizio corrente
+      const tripsForServiceId = tripsData
          .filter((trip) => trip.service_id === serviceId)
          .map((trip) => trip.trip_id);
 
-      const filteredStopTimesDataByServiceId = stopTimesData.filter(
-         (stopTime) => filteredTripsDataByServiceId.includes(stopTime.trip_id)
+      // prendo solo le fermate attive per i Trip attivi in base al giorno corrente
+      const stopTimesForServiceId = stopTimesData.filter(
+         (stopTime) => tripsForServiceId.includes(stopTime.trip_id)
       );
 
-      const groupedStopTimesByTripId = groupStopTimesByTrip(
-         filteredStopTimesDataByServiceId
-      );
+      // genera un oggetto che associa ogni trip_id a un array di stop_times corrispondenti
+      const stopTimesByTripId = groupStopTimesByTrip(stopTimesForServiceId);
 
       // trip validi sia per giorno di servizio che per orario del giorno (contiene solo trip_id)
-      const validTripIdsByServiceHour = filterValidTripsByTime(
-         groupedStopTimesByTripId,
-         currentTimeInMinutes
+      const validTripIds = filterValidTripsByTime(
+          stopTimesByTripId,
+          currentTimeInMinutes
       );
-      setValidTripsId(validTripIdsByServiceHour);
+      setValidTripsId(validTripIds);
 
       // trip validi sia per giorno di servizio che per orario del giorno (contiene tutta la riga)
       const validTrips = tripsData.filter((trip) =>
-         validTripIdsByServiceHour.includes(trip.trip_id)
+          validTripIds.includes(trip.trip_id)
       );
 
       // dei trip_id doppioni ne prendo solo la prima occorrenza
-      const uniqueTripsByRouteId = Object.values(
+      const firstTripsPerRoute = Object.values(
          validTrips.reduce((acc, trip) => {
             if (!acc[trip.route_id]) {
                acc[trip.route_id] = trip;
@@ -575,19 +580,18 @@ function MapComponent() {
          }, {})
       );
 
-      // arrichisco i dati con ulteriori info: route_short_name e route_long_name (no doppioni)
-      const enrichedValidTrips = enrichTripsWithRouteInfo(
-         uniqueTripsByRouteId,
-         routesData
-      );
+      // arricchisco i dati con ulteriori info: route_short_name e route_long_name (no doppioni)
+      const uniqueEnrichedTrips = enrichTripsWithShortAndLongName(firstTripsPerRoute, routesData);
 
-      // arrichisco i dati con ulteriori info: route_short_name e route_long_name (doppioni)
-      const enrichedTrips = enrichTripsWithRouteInfo(validTrips, routesData);
-      const groupedEnrichedTrips = groupTripsByRoute(enrichedTrips);
-      setValidTrips(groupedEnrichedTrips);
+      // arricchisco i dati con ulteriori info: route_short_name e route_long_name (doppioni)
+      const allEnrichedTrips = enrichTripsWithShortAndLongName(validTrips, routesData);
 
-      const groupedEnrichedValidTrips = groupTripsByRoute(enrichedValidTrips);
-      setEnrichedTrip(groupedEnrichedValidTrips);
+      const enrichedTripsByRoute = groupTripsByRouteId(allEnrichedTrips);
+      setValidTrips(enrichedTripsByRoute);
+
+      const validTripsByRoute = groupTripsByRouteId(uniqueEnrichedTrips);
+      setEnrichedTrip(validTripsByRoute);
+
    }, [tripsData, stopTimesData, routesData, currentTime]);
 
    useEffect(() => {
@@ -612,16 +616,16 @@ function MapComponent() {
 
    // funzione che processa i trip e la shape attiva in questo momento
    const processStopsAndShapes = (
-      TRIPDACONSIDERARE,
-      stopTimesData,
-      stopsData,
-      shapesData,
-      shapeAttive,
-      currentTime
+       tripsToConsider,
+       stopTimesData,
+       stopsData,
+       shapesData,
+       shapeAttive,
+       currentTime
    ) => {
       // Step 1: filtra stop_times dal loro trip_id
-      const tripIds = TRIPDACONSIDERARE.map((trip) => trip.trip_id);
-      const filteredStopTimes = stopTimesData.filter((stopTime) =>
+      const tripIds = tripsToConsider.map((trip) => trip.trip_id);
+      const stopTimesForTripIds = stopTimesData.filter((stopTime) => // tutte le fermate che fa quel trip
          tripIds.includes(stopTime.trip_id)
       );
 
@@ -629,9 +633,9 @@ function MapComponent() {
       const getStopDetails = (stopId) =>
          stopsData.find((stop) => stop.stop_id === stopId);
 
-      // Step 3: prendi l'ultima fermata effettuata dal trip e l'ultima fermata del suo viaggio in generale (per ciascun trip)
-      const stops = tripIds.map((tripId) => {
-         const stopsForTrip = filteredStopTimes.filter(
+      // Step 3: prendi l'ultima fermata effettuata dal trip e l'ultima fermata del suo viaggio
+      const stopsWithDetails = tripIds.map((tripId) => {
+         const stopsForTrip = stopTimesForTripIds.filter(
             (stop) => stop.trip_id === tripId
          );
 
@@ -663,45 +667,48 @@ function MapComponent() {
       });
 
       if (!Array.isArray(shapeAttive) || shapeAttive.length === 0) {
-         console.error("shapeAttive non è un array o è vuoti");
-         return { newStops: stops, shapesByTripId: {} };
+         console.error("Nessuna rotta attiva");
+         return { newStops: stopsWithDetails, shapesByTripId: {} };
       }
 
       // Step 4: individuiamo quale shape filtrare e mostrare di conseguenza
+      const activeShapes = new Set(shapeAttive);
       const shapeId = shapesData.filter((shape) =>
-         shapeAttive[0].includes(shape.shape_id)
+          activeShapes.has(shape.shape_id)
       );
 
-      const newStops = stops.map((stop) => {
+      const stopsWithShapeInfo = stopsWithDetails.map((stop) => {
          const lastStop = stop.lastStop;
          const nextStop = stop.nextStop;
 
-         const matchingLastStopShape = shapeId.find(
+         const lastStopShape = shapeId.find(
             (shape) =>
                parseFloat(shape.shape_pt_lat) ===
                   parseFloat(lastStop.stop_lat) &&
                parseFloat(shape.shape_pt_lon) === parseFloat(lastStop.stop_lon)
          );
 
-         const matchingNextStopShape = shapeId.find(
-            (shape) =>
-               parseFloat(shape.shape_pt_lat) ===
-                  parseFloat(nextStop.stop_lat) &&
-               parseFloat(shape.shape_pt_lon) === parseFloat(nextStop.stop_lon)
-         );
+         const nextStopShape = shapeId
+             .slice() // copio l'array per non modificarlo direttamente
+             .reverse() // Inverto l'array
+             .find(
+                 (shape) => // per gestire il caso in cui l'inizio e la fine siano nella stessa fermata
+                     parseFloat(shape.shape_pt_lat) === parseFloat(nextStop.stop_lat) &&
+                     parseFloat(shape.shape_pt_lon) === parseFloat(nextStop.stop_lon)
+             );
 
          return {
             ...stop,
             lastStop: {
                ...lastStop,
-               matchedShapeSequence: matchingLastStopShape
-                  ? matchingLastStopShape.shape_pt_sequence
+               matchedShapeSequence: lastStopShape
+                  ? lastStopShape.shape_pt_sequence
                   : "No match",
             },
             nextStop: {
                ...nextStop,
-               matchedShapeSequence: matchingNextStopShape
-                  ? matchingNextStopShape.shape_pt_sequence
+               matchedShapeSequence: nextStopShape
+                  ? nextStopShape.shape_pt_sequence
                   : "No match",
             },
          };
@@ -709,8 +716,7 @@ function MapComponent() {
 
       // Step 5: per ciascun trip prendi la fetta di shape che deve fare compresa tra la sua ultima fermata fatta e l'ultima fermata del viaggio
       const shapesByTripId = {};
-
-      newStops.forEach((stop) => {
+      stopsWithShapeInfo.forEach((stop) => {
          const lastStopSeq = stop.lastStop.matchedShapeSequence;
          const nextStopSeq = stop.nextStop.matchedShapeSequence;
          const tripId = stop.lastStop.trip_id;
@@ -719,7 +725,7 @@ function MapComponent() {
             const lastSeq = parseInt(lastStopSeq);
             const nextSeq = parseInt(nextStopSeq);
 
-            const shapesInRangeForTrip = shapeId.filter((shape) => {
+            const tripShapesInRange = shapeId.filter((shape) => {
                const sequence = parseInt(shape.shape_pt_sequence, 10);
                return (
                   sequence >= lastSeq &&
@@ -732,48 +738,49 @@ function MapComponent() {
                shapesByTripId[tripId] = [];
             }
 
-            shapesByTripId[tripId].push(...shapesInRangeForTrip);
+            shapesByTripId[tripId].push(...tripShapesInRange);
          }
       });
 
       return {
-         newStops,
+         stopsWithShapeInfo,
          shapesByTripId,
       };
    };
 
    useEffect(() => {
       const updateMarker = () => {
-         const map = mapViewRef.current?.map;
-         const stopsLayer = map?.findLayerById("stopsFeatureLayer");
-         const lineeLayer = map?.findLayerById("linesFeatureLayer");
-         const view = mapViewRef.current;
-         const graphicLayer = animationGraphicsLayer;
+         const currentMap = mapViewRef.current?.map;
+         const stopsLayer = currentMap?.findLayerById("stopsFeatureLayer");
+         const lineeLayer = currentMap?.findLayerById("linesFeatureLayer");
+         const mapView = mapViewRef.current;
+         const animationLayer = animationGraphicsLayer;
 
-         const shape = shapesData.filter((shape) =>
-            shapeAttive.includes(shape.shape_id)
+         // filtro shapesData e prendo solo l'id delle shape attive al momento
+         const activeShape = shapesData.filter((shape) =>
+             activeShapes.includes(shape.shape_id)
          );
 
          if (stopsLayer) {
-            if (tutteFermate) {
+            if (allStops) {
                stopsLayer.definitionExpression = null;
                stopsLayer.visible = true;
             } else if (selectedLongNames.size > 0) {
-               const tripsArray = validTrips[selectedRouteShortName] || []; // selezioniamo solo quelle che ci interessano dato il numero del vaporetto
-               const allStopIds = new Set();
+               const selectedRouteTrips = validTrips[selectedRouteShortName] || []; // selezioniamo solo quelle che ci interessano dato il numero del vaporetto
+               const tripStopIds = new Set();
 
                Array.from(selectedLongNames).forEach((longName) => {
-                  const trip = tripsArray.filter(
+                  const matchingTrips = selectedRouteTrips.filter(
                      (trip) => trip.route_long_name === longName
                   );
 
-                  if (trip) {
-                     const fermate = trip.map((trip) => trip.trip_id);
+                  if (matchingTrips) {
+                     const tripIds = matchingTrips.map((trip) => trip.trip_id);
                      const stopIds = getStopIdsByTripId(
-                        fermate[0],
+                         tripIds[0],
                         stopTimesData
                      );
-                     stopIds.forEach((id) => allStopIds.add(id));
+                     stopIds.forEach((id) => tripStopIds.add(id));
 
                      // NOTA: gli orari notturni sono segnati come 25:00, 26:00..., per ottenere risulati validi sottraiamo 24
                      const timeToMinutes = (time) => {
@@ -786,7 +793,7 @@ function MapComponent() {
 
                      const filteredTrips = stopTimesData.filter(
                         (row) =>
-                           fermate.includes(row.trip_id) &&
+                            tripIds.includes(row.trip_id) &&
                            timeToMinutes(row.arrival_time) <=
                               timeToMinutes(currentTime)
                      );
@@ -815,15 +822,15 @@ function MapComponent() {
                         }
                      });
 
-                     // newStops contiene solo i trip validi per giorno, per ora, per numero di battello scelto e per route_long_name
-                     // shapesByTripId mi inidica quale shape ciascun trip deve seguire
-                     const { newStops, shapesByTripId } = processStopsAndShapes(
-                        TRIPDACONSIDERARE,
-                        stopTimesData,
-                        stopsData,
-                        shapesData,
-                        shapeAttive,
-                        currentTime
+                     // stopsWithShapeInfo: contiene solo i trip validi per giorno, per ora, per numero di battello scelto e per route_long_name
+                     // shapesByTripId: mi inidica quale shape ciascun trip deve seguire
+                     const { stopsWithShapeInfo, shapesByTripId } = processStopsAndShapes(
+                         tripsToConsider,
+                         stopTimesData,
+                         stopsData,
+                         shapesData,
+                         activeShapes,
+                         currentTime
                      );
 
                      const parseTimeToDate = (timeStr) => {
@@ -845,9 +852,14 @@ function MapComponent() {
                         return (arrivalDate - departureDate) / 1000;
                      };
 
-                     const calculateElapsedTime = (departureTime) => {
+                     const calculateElapsedSeconds = (departureTime) => {
                         const departureDate = parseTimeToDate(departureTime);
-                        return (Date.now() - departureDate) / 1000;
+                        const elapsedMilliseconds = Date.now() - departureDate;
+                        const elapsedSeconds = elapsedMilliseconds / 1000;
+
+                        // Assicuriamoci che il tempo trascorso non sia negativo
+                        return Math.max(elapsedSeconds, 0);
+                        // return (Date.now() - departureDate) / 1000;
                      };
 
                      const calculateSpeedScale = (
@@ -883,9 +895,8 @@ function MapComponent() {
                         });
 
                         if (!userLocation) {
-                           const graphic = animationGraphicsLayer;
-                           graphic.removeAll();
-                           view.graphics.removeAll();
+                           animationGraphicsLayer.removeAll();
+                           mapView.graphics.removeAll();
 
                            // funzione per cominciare l'animazione
                            const startAnimation = (
@@ -896,7 +907,7 @@ function MapComponent() {
                            ) => {
                               // consideriamo un ritardo di 2 minuti per tutti i viaggi
                               const DELAY_SECONDS = 120; // 2 mins in secs
-                              const SPEED_SCALE = calculateSpeedScale(
+                              const ANIMATION_SPEED_SCALE = calculateSpeedScale(
                                  departureTime,
                                  arrivalTime,
                                  DELAY_SECONDS
@@ -907,51 +918,51 @@ function MapComponent() {
                                  arrivalTime
                               );
 
-                              const elapsedTime =
-                                 calculateElapsedTime(departureTime);
+                              const elapsedSeconds =
+                                  calculateElapsedSeconds(departureTime);
 
-                              const calculateProgress = (
+                              const calculateAnimationProgress = (
                                  elapsedTime,
                                  duration
                               ) => {
                                  const adjustedElapsedTime =
-                                    elapsedTime * SPEED_SCALE;
+                                    elapsedTime * ANIMATION_SPEED_SCALE;
                                  return Math.min(
                                     adjustedElapsedTime / duration,
                                     1
                                  );
                               };
 
-                              const progress = calculateProgress(
-                                 elapsedTime,
+                              const progress = calculateAnimationProgress(
+                                  elapsedSeconds,
                                  timeWindow
                               );
 
-                              const markerPosition = getCurrentMarkerPosition(
+                              const currentPathPosition = getCurrentMarkerPosition(
                                  path,
                                  progress
                               );
 
-                              if (!markerPosition) return;
+                              if (!currentPathPosition) return;
 
                               const marker = new Graphic({
                                  geometry: new Point({
-                                    x: markerPosition.shape_pt_lon,
-                                    y: markerPosition.shape_pt_lat,
+                                    x: currentPathPosition.shape_pt_lon,
+                                    y: currentPathPosition.shape_pt_lat,
                                     spatialReference: { wkid: 4326 },
                                  }),
                                  symbol,
                               });
 
-                              graphicLayer.add(marker);
+                              animationLayer.add(marker);
 
                               let animationStart = Date.now();
-                              const duration = timeWindow - elapsedTime;
+                              const duration = timeWindow - elapsedSeconds;
 
                               const updatePosition = () => {
                                  const elapsedTime =
                                     (Date.now() - animationStart) / 1000;
-                                 const progress = calculateProgress(
+                                 const progress = calculateAnimationProgress(
                                     elapsedTime,
                                     duration
                                  );
@@ -966,7 +977,7 @@ function MapComponent() {
                                     });
                                  }
 
-                                 // arrivato alla fine eliminiamo il marker
+                                 // arrivato a destinazione eliminiamo il marker
                                  if (progress >= 1) {
                                     marker.geometry = new Point({
                                        x: path[path.length - 1].shape_pt_lon,
@@ -986,11 +997,10 @@ function MapComponent() {
                            };
 
                            // serve per mettere il marker A e B di inizio e fine corsa
-                           if (shape.length > 0) {
-                              const firstPoint = shape[0];
-                              const lastPoint = shape[shape.length - 1];
+                           if (activeShape.length > 0) {
+                              const firstPoint = activeShape[0];
+                              const lastPoint = activeShape[activeShape.length - 1];
 
-                              // Create Point objects
                               const startPoint = new Point({
                                  x: parseFloat(firstPoint.shape_pt_lon),
                                  y: parseFloat(firstPoint.shape_pt_lat),
@@ -1003,35 +1013,35 @@ function MapComponent() {
                                  spatialReference: { wkid: 4326 },
                               });
 
-                              const beginSymbol = new PictureMarkerSymbol({
+                              const startSymbol = new PictureMarkerSymbol({
                                  url: "/beginning.png",
                                  width: "36px",
                                  height: "36px",
                               });
 
-                              const destSymbol = new PictureMarkerSymbol({
+                              const endSymbol = new PictureMarkerSymbol({
                                  url: "/destination.png",
                                  width: "36px",
                                  height: "36px",
                               });
 
-                              const startGraphic = new Graphic({
+                              const startMarkerGraphic = new Graphic({
                                  geometry: startPoint,
-                                 symbol: beginSymbol,
+                                 symbol: startSymbol,
                               });
 
-                              const endGraphic = new Graphic({
+                              const endMarkerGraphic = new Graphic({
                                  geometry: endPoint,
-                                 symbol: destSymbol,
+                                 symbol: endSymbol,
                               });
 
-                              graphicLayer.add(startGraphic);
-                              graphicLayer.add(endGraphic);
+                              animationLayer.add(startMarkerGraphic);
+                              animationLayer.add(endMarkerGraphic);
                            }
 
                            Object.entries(shapesByTripId).forEach(
                               ([tripId, path]) => {
-                                 const tripStops = newStops.find(
+                                 const tripStops = stopsWithShapeInfo.find(
                                     (stop) => stop.tripId === tripId
                                  );
                                  if (tripStops && path) {
@@ -1048,13 +1058,13 @@ function MapComponent() {
                                  }
                               }
                            );
-                        } else if (userLocation && newStops.length > 0) {
+                        } else if (userLocation && stopsWithShapeInfo.length > 0) {
                            // uguale a prima, ma con la location dell'utente attivata
                            // in questo caso mostriamo solo il viaggio con l'ultima fermata fatta più vicina all'utente (distanza euclidea)
                            const graphic = animationGraphicsLayer;
                            graphic.removeAll();
-                           view.graphics.removeAll();
-                           const closestLastStop = newStops.reduce(
+                           mapView.graphics.removeAll();
+                           const closestLastStop = stopsWithShapeInfo.reduce(
                               (closest, trip) => {
                                  if (
                                     trip.lastStop &&
@@ -1180,12 +1190,12 @@ function MapComponent() {
                                  symbol,
                               });
 
-                              graphicLayer.add(marker);
+                              animationLayer.add(marker);
 
                               // impostiamo i marker di inizio e fine corsa
-                              if (shape.length > 0) {
-                                 const firstPoint = shape[0];
-                                 const lastPoint = shape[shape.length - 1];
+                              if (activeShape.length > 0) {
+                                 const firstPoint = activeShape[0];
+                                 const lastPoint = activeShape[activeShape.length - 1];
 
                                  // Create Point objects
                                  const startPoint = new Point({
@@ -1222,8 +1232,8 @@ function MapComponent() {
                                     symbol: destSymbol,
                                  });
 
-                                 graphicLayer.add(startGraphic);
-                                 graphicLayer.add(endGraphic);
+                                 animationLayer.add(startGraphic);
+                                 animationLayer.add(endGraphic);
                               }
 
                               let animationStart = Date.now();
@@ -1265,7 +1275,7 @@ function MapComponent() {
                               updatePosition();
                            };
 
-                           const tripStops = newStops.find(
+                           const tripStops = stopsWithShapeInfo.find(
                               (trip) =>
                                  trip.tripId === closestLastStop.stop.trip_id
                            );
@@ -1280,18 +1290,17 @@ function MapComponent() {
                                  arrivalTime
                               );
                            }
-                           if (closestLastStop.stop) {
-                           } else {
+                           if (!closestLastStop.stop) {
                               console.log("Nessuna ultima fermata trovata");
                            }
                         }
                      } else {
-                        console.log("Stop_id non esisstente");
+                        console.log("Stop_id non esistente");
                      }
                   }
                });
 
-               const whereClause = `stop_id IN (${Array.from(allStopIds)
+               const whereClause = `stop_id IN (${Array.from(tripStopIds)
                   .map((id) => `'${id}'`)
                   .join(",")})`;
 
@@ -1317,10 +1326,10 @@ function MapComponent() {
                   .filter((shapeId) => shapeId !== null);
 
                if (shapeIds.length > 0) {
-                  const expression = shapeIds
+                  const shapeIdExpression = shapeIds
                      .map((id) => `shape_id = '${id}'`)
                      .join(" OR ");
-                  lineeLayer.definitionExpression = expression;
+                  lineeLayer.definitionExpression = shapeIdExpression;
                   lineeLayer.visible = true;
                } else {
                   lineeLayer.definitionExpression = "1=0";
@@ -1335,7 +1344,7 @@ function MapComponent() {
 
       updateMarker();
    }, [
-      tutteFermate,
+      allStops,
       selectedLongNames,
       enrichedTrip,
       selectedRouteShortName,
@@ -1343,18 +1352,18 @@ function MapComponent() {
       stopsData,
       validTrips,
       userLocation,
-      shapeAttive,
+      activeShapes,
       shapesData,
       currentTime,
-      TRIPDACONSIDERARE,
+      tripsToConsider,
       animationGraphicsLayer,
    ]);
 
-   const handletutteFermate = () => {
-      setTutteFermate((prev) => !prev);
+   const handleAllStops = () => {
+      setAllStops((prev) => !prev);
    };
 
-   // handler per quando si preme il bottone del numero della linea
+   // handler per quando si preme il numero della linea
    const handleButtonClick = (numeroBattello) => {
       const map = mapViewRef.current?.map;
       const view = mapViewRef.current;
@@ -1393,22 +1402,22 @@ function MapComponent() {
 
    // handler per quando si preme la corsa selezionata
    const handleLongNameClick = (longName) => {
-      const map = mapViewRef.current?.map;
-      const view = mapViewRef.current;
+      const mapView = mapViewRef.current?.map;
+      const currentView = mapViewRef.current;
 
-      if (view) {
-         view.graphics.removeAll();
+      if (currentView) {
+         currentView.graphics.removeAll();
 
-         const stopsLayer = map?.findLayerById("stopsFeatureLayer");
+         const stopsLayer = mapView?.findLayerById("stopsFeatureLayer");
          if (stopsLayer) {
             stopsLayer.definitionExpression = "1=0";
             stopsLayer.visible = false;
          }
 
-         const lineeLayer = map?.findLayerById("linesFeatureLayer");
-         if (lineeLayer) {
-            lineeLayer.definitionExpression = "1=0";
-            lineeLayer.visible = false;
+         const linesLayer = mapView?.findLayerById("linesFeatureLayer");
+         if (linesLayer) {
+            linesLayer.definitionExpression = "1=0";
+            linesLayer.visible = false;
          }
 
          if (animationGraphicsLayer) {
@@ -1435,9 +1444,9 @@ function MapComponent() {
       const tripsWithLongName = filteredTrips.filter(
          (trip) => trip.route_long_name === longName
       );
-      setTRIPDACONSIDERARE(tripsWithLongName);
+      setTripsToConsider(tripsWithLongName);
 
-      setShapeAttive(shapeIds);
+      setActiveShapes(shapeIds);
 
       centerMapOnShapes(shapeIds);
    };
@@ -1714,7 +1723,7 @@ function MapComponent() {
                <div className="container mt-4">
                   <button
                      className="btn btn-primary m-2 w-100"
-                     onClick={handletutteFermate}
+                     onClick={handleAllStops}
                      style={{
                         backgroundColor:
                            buttonColors.mostraTutteFermate.background,
